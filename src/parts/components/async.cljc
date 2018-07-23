@@ -105,7 +105,7 @@
     (if (some? stop-chan)
       this
       (let [stop-chan (a/chan)
-            chans     (into [stop-chan] (map #(get-in this %)) channel-paths)]
+            chans     (into [stop-chan] (keep #(get-in this %)) channel-paths)]
         (go-loop []
           (let [[item chan] (a/alts! chans :priority true)
                 stop?       (or (= stop-chan chan) (nil? item))]
