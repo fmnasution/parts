@@ -21,6 +21,7 @@
 (defrecord Datomic [config conn]
   c/Lifecycle
   (start [{:keys [config conn] :as this}]
+    (s/assert ::datomic-params this)
     (if (some? conn)
       this
       (let [uri      (:uri config)
