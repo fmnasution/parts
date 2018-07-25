@@ -4,6 +4,7 @@
                  [org.clojure/clojure "1.10.0-alpha5"]
                  [metosin/ring-http-response "0.9.0"]
                  [http-kit "2.3.0"]
+                 [org.clojure/tools.namespace "0.2.11"]
                  ;; ---- cljc ----
                  [org.clojure/core.async "0.4.474"]
                  [com.stuartsierra/component "0.3.2"]
