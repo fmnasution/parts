@@ -3,17 +3,17 @@
  :dependencies '[;; ---- clj ----
                  [org.clojure/clojure "1.10.0-alpha5"]
                  [metosin/ring-http-response "0.9.0"]
-                 [http-kit "2.3.0"]
+                 [http-kit "2.3.0" :scope "provided"]
                  [org.clojure/tools.namespace "0.2.11"]
                  ;; ---- cljc ----
-                 [org.clojure/core.async "0.4.474"]
+                 [org.clojure/core.async "0.4.474" :scope "provided"]
                  [com.stuartsierra/component "0.3.2"]
-                 [bidi "2.1.3"]
-                 [rum "0.11.2"]
-                 [cljs-ajax "0.7.4"]
-                 [com.taoensso/sente "1.12.0"]
+                 [bidi "2.1.3" :scope "provided"]
+                 [rum "0.11.2" :scope "provided"]
+                 [cljs-ajax "0.7.4" :scope "provided"]
+                 [com.taoensso/sente "1.12.0" :scope "provided"]
                  ;; ---- cljs ----
-                 [org.clojure/clojurescript "1.10.339"]
+                 [org.clojure/clojurescript "1.10.339" :scope "provided"]
                  ;; ---- dev ----
                  [samestep/boot-refresh "0.1.0" :scope "test"]
                  [adzerk/bootlaces "0.1.13" :scope "test"]])
@@ -23,7 +23,7 @@
  '[adzerk.bootlaces :refer [bootlaces! build-jar push-snapshot]])
 
 (def +version+
-  "0.1.0-SNAPSHOT")
+  "0.1.0")
 
 (bootlaces! +version+)
 
