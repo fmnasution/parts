@@ -24,7 +24,7 @@
  '[adzerk.bootlaces :refer [bootlaces! build-jar push-snapshot push-release]])
 
 (def +version+
-  "0.1.1-SNAPSHOT")
+  "0.1.1")
 
 (bootlaces! +version+)
 
