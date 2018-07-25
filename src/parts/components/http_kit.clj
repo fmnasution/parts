@@ -10,11 +10,17 @@
 (s/def ::config
   map?)
 
+(s/def ::handler
+  fn?)
+
 (s/def ::ring-handler
-  (s/nilable map?))
+  (s/nilable (s/keys :req-un [::handler])))
+
+(s/def ::wrapper
+  fn?)
 
 (s/def ::ring-middleware
-  (s/nilable map?))
+  (s/nilable (s/keys :req-un [::wrapper])))
 
 (s/def ::web-server-params
   (s/keys :req-un [::config ::ring-handler ::ring-middleware]))

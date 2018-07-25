@@ -12,8 +12,11 @@
 (s/def ::routes
   ::cu/routes)
 
+(s/def ::wrapper
+  fn?)
+
 (s/def ::option-middleware
-  (s/nilable map?))
+  (s/nilable (s/keys :req-un [::wrapper])))
 
 (s/def ::http-client-params
   (s/keys :req-un [::routes ::option-middleware]))

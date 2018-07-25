@@ -4,15 +4,47 @@
    [clojure.core.async :as a]
    [com.stuartsierra.component :as c]
    [taoensso.sente :refer [make-channel-socket!]]
-   [taoensso.sente.interfaces :as senteitf]))
+   [taoensso.sente.interfaces :refer [IServerChanAdapter IPacker]]))
 
 ;; ---- websocket server spec ----
 
 (s/def ::server-adapter
-  #(satisfies? senteitf/IServerChanAdapter %))
+  #(satisfies? IServerChanAdapter %))
+
+(s/def ::user-id-fn
+  fn?)
+
+(s/def ::csrf-token-fn
+  fn?)
+
+(s/def ::handshake-data-fn
+  fn?)
+
+(s/def ::ws-kalive-ms
+  pos-int?)
+
+(s/def ::lp-timeout-ms
+  pos-int?)
+
+(s/def ::send-buf-ms-ajax
+  pos-int?)
+
+(s/def ::send-buf-ms-ws
+  pos-int?)
+
+(s/def ::packer
+  (s/or :edn    #(= :edn %)
+        :packer #(satisfies? IPacker %)))
 
 (s/def ::server-option
-  (s/nilable map?))
+  (s/nilable (s/keys :opt-un [::user-id-fn
+                              ::csrf-token-fn
+                              ::handshake-data-fn
+                              ::ws-kalive-ms
+                              ::lp-timeout-ms
+                              ::send-buf-ms-ajax
+                              ::send-buf-ms-ws
+                              ::packer])))
 
 (s/def ::websocket-server-params
   (s/keys :req-un [::server-adapter ::server-option]))
