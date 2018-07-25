@@ -2,7 +2,21 @@
   (:require
    [com.stuartsierra.component :as c]
    [bidi.bidi :as b]
-   [ajax.core :as jx]))
+   [ajax.core :as jx]
+   [parts.components.util :as cu]
+   #?@(:clj  [[clojure.spec.alpha :as s]]
+       :cljs [[cljs.spec.alpha :as s]])))
+
+;; ---- http client spec ----
+
+(s/def ::routes
+  ::cu/routes)
+
+(s/def ::option-middleware
+  (s/nilable map?))
+
+(s/def ::http-client-params
+  (s/keys :req-un [::routes ::option-middleware]))
 
 ;; ---- http client ----
 
@@ -19,6 +33,7 @@
 (defrecord HttpClient [routes option-middleware caller]
   c/Lifecycle
   (start [{:keys [routes option-middleware caller] :as this}]
+    (s/assert ::http-client-params this)
     (if (some? caller)
       this
       (let [caller (fn [routes handler route-params request-method option]

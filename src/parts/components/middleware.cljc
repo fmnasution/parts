@@ -1,6 +1,19 @@
 (ns parts.components.middleware
   (:require
-   [com.stuartsierra.component :as c]))
+   [com.stuartsierra.component :as c]
+   #?@(:clj  [[clojure.spec.alpha :as s]]
+       :cljs [[cljs.spec.alpha :as s]])))
+
+;; ---- midleware spec ----
+
+(s/def ::entries
+  (s/cat :entries
+         (s/+ (s/or :entry     fn?
+                    :with-args (s/cat :entry fn?
+                                      :args  (s/* any?))))))
+
+(s/def ::middleware-params
+  (s/keys :req-un [::entries]))
 
 ;; ---- middleware ----
 
@@ -24,24 +37,17 @@
                      (map as-middleware))
                     entries)))
 
-(defn- create-middleware
-  [{:keys [entries wrapper] :as this}]
-  (cond-> this
-    (nil? wrapper)
-    (assoc :wrapper (compose-middleware this entries))))
-
-(defn- destroy-middleware
-  [{:keys [wrapper] :as this}]
-  (cond-> this
-    (some? wrapper)
-    (assoc :wrapper nil)))
-
 (defrecord Middleware [entries wrapper]
   c/Lifecycle
-  (start [this]
-    (create-middleware this))
-  (stop [this]
-    (destroy-middleware this)))
+  (start [{:keys [entries wrapper] :as this}]
+    (s/assert ::middleware-params this)
+    (cond-> this
+      (nil? wrapper)
+      (assoc :wrapper (compose-middleware this entries))) )
+  (stop [{:keys [wrapper] :as this}]
+    (cond-> this
+      (some? wrapper)
+      (assoc :wrapper nil))))
 
 (defn make-middleware
   [{:keys [entries]}]

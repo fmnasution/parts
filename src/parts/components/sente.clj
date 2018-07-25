@@ -1,8 +1,21 @@
 (ns parts.components.sente
   (:require
+   [clojure.spec.alpha :as s]
    [clojure.core.async :as a]
    [com.stuartsierra.component :as c]
-   [taoensso.sente :refer [make-channel-socket!]]))
+   [taoensso.sente :refer [make-channel-socket!]]
+   [taoensso.sente.interfaces :as senteitf]))
+
+;; ---- websocket server spec ----
+
+(s/def ::server-adapter
+  #(satisfies? senteitf/IServerChanAdapter %))
+
+(s/def ::server-option
+  (s/nilable map?))
+
+(s/def ::websocket-server-params
+  (s/keys :req-un [::server-adapter ::server-option]))
 
 ;; ---- websocket server ----
 
@@ -15,6 +28,7 @@
                             connected-uids]
   c/Lifecycle
   (start [{:keys [server-adapter server-option recv-chan] :as this}]
+    (s/assert ::websocket-server-params this)
     (if (some? recv-chan)
       this
       (let [{:keys [ch-recv

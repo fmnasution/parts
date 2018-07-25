@@ -1,14 +1,30 @@
 (ns parts.components.http-kit
   (:require
+   [clojure.spec.alpha :as s]
    [com.stuartsierra.component :as c]
    [ring.util.http-response :as resp]
    [org.httpkit.server :refer [run-server]]))
 
+;; ---- web server spec ----
+
+(s/def ::config
+  map?)
+
+(s/def ::ring-handler
+  (s/nilable map?))
+
+(s/def ::ring-middleware
+  (s/nilable map?))
+
+(s/def ::web-server-params
+  (s/keys :req-un [::config ::ring-handler ::ring-middleware]))
+
 ;; ---- web server ----
 
-(defrecord WebServer [config server ring-handler ring-middleware]
+(defrecord WebServer [config ring-handler ring-middleware server]
   c/Lifecycle
   (start [{:keys [config server ring-handler ring-middleware] :as this}]
+    (s/assert ::web-server-params this)
     (if (some? server)
       this
       (let [middleware (:wrapper ring-middleware identity)

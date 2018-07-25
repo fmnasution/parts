@@ -1,11 +1,60 @@
 (ns parts.components.async
   (:require
    [com.stuartsierra.component :as c]
-   #?@(:clj  [[clojure.core.async :as a :refer [go-loop]]]
-       :cljs [[cljs.core.async :as a]]))
+   #?@(:clj  [[clojure.spec.alpha :as s]
+              [clojure.core.async :as a :refer [go-loop]]]
+       :cljs [[cljs.spec.alpha :as s]
+              [cljs.core.async :as a]]))
   #?@(:cljs
       (:require-macros
        [cljs.core.async.macros :refer [go-loop]])))
+
+;; ---- channel pipeliner spec ----
+
+(s/def ::parallelism
+  (s/nilable pos-int?))
+
+(s/def ::to-key
+  keyword?)
+
+(s/def ::to
+  some?)
+
+(s/def ::xform-fn
+  fn?)
+
+(s/def ::from-key
+  keyword?)
+
+(s/def ::from
+  some?)
+
+(s/def ::close-both?
+  (s/nilable boolean?))
+
+(s/def ::ex-handler
+  fn?)
+
+(s/def ::channel-pipeliner-params
+  (s/keys :req-un [::parallelism
+                   ::to-key
+                   ::to
+                   ::xform-fn
+                   ::from-key
+                   ::from
+                   ::close-both?
+                   ::ex-handler]))
+
+;; ---- channel listener spec ----
+
+(s/def ::channel-paths
+  (s/coll-of (s/cat :path (s/+ keyword?))))
+
+(s/def ::callback
+  fn?)
+
+(s/def ::channel-listener-params
+  (s/keys :req-un [::channel-paths ::callback]))
 
 ;; ---- item dispatcher ----
 
@@ -67,6 +116,7 @@
                   ex-handler
                   started?]
            :as   this}]
+    (s/assert ::channel-pipeliner-params this)
     (if started?
       this
       (let [pipeline!   (case kind
@@ -102,6 +152,7 @@
 (defrecord ChannelListener [channel-paths callback stop-chan]
   c/Lifecycle
   (start [{:keys [channel-paths callback stop-chan] :as this}]
+    (s/assert ::channel-listener-params this)
     (if (some? stop-chan)
       this
       (let [stop-chan (a/chan)

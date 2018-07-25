@@ -1,8 +1,21 @@
 (ns parts.components.sente
   (:require
+   [cljs.spec.alpha :as s]
    [cljs.core.async :as a]
    [com.stuartsierra.component :as c]
-   [taoensso.sente :as sente :refer [make-channel-socket!]]))
+   [taoensso.sente :as sente :refer [make-channel-socket!]]
+   [parts.components.util :as cu]))
+
+;; ---- websocket client params ----
+
+(s/def ::server-uri
+  cu/nblank-str?)
+
+(s/def ::client-option
+  (s/nilable map?))
+
+(s/def ::websocket-client-params
+  (s/keys :req-un [::server-uri ::client-option]))
 
 ;; ---- websocket client ----
 
@@ -14,6 +27,7 @@
                             state]
   c/Lifecycle
   (start [{:keys [recv-chan] :as this}]
+    (s/assert ::websocket-client-params this)
     (if (some? recv-chan)
       this
       (let [{:keys [chsk ch-recv send-fn state]}
