@@ -29,7 +29,8 @@
 (bootlaces! +version+)
 
 (task-options!
- push {:ensure-branch nil}
+ push {:ensure-branch nil
+       :repo-map      {:checksum :warn}}
  pom  {:project     'parts
        :version     +version+
        :description "Collection of reusable components for my personal use"
