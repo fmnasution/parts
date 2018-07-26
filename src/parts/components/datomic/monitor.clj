@@ -22,7 +22,7 @@
 
 (defrecord DatomicMonitor [datomic callback active?_]
   c/Lifecycle
-  (start [{:keys [datomic active?_] :as this}]
+  (start [{:keys [datomic callback active?_] :as this}]
     (s/assert ::datomic-monitor-params this)
     (if (some? active?_)
       this
