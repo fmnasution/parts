@@ -8,7 +8,7 @@
 ;; ---- datomic spec ----
 
 (s/def ::uri
-  cu/nblank-str?)
+  ::cu/nblank-str)
 
 (s/def ::config
   (s/keys :req-un [::uri]))

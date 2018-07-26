@@ -4,13 +4,14 @@
    #?@(:clj  [[clojure.spec.alpha :as s]]
        :cljs [[cljs.spec.alpha :as s]])))
 
-(declare nblank-str?)
-
 ;; ---- spec ----
 
+(s/def ::nblank-str
+  #(and (string? %) (not (string/blank? %))))
+
 (s/def ::inner-routes
-  (s/map-of (s/or :path          nblank-str?
-                  :parameterized (s/+ (s/or :path  nblank-str?
+  (s/map-of (s/or :path          ::nblank-str
+                  :parameterized (s/+ (s/or :path  ::nblank-str
                                             :param keyword?))
                   :match-all     true?)
             (s/or :handler       keyword?
@@ -21,9 +22,3 @@
 
 (s/def ::resources
   (s/map-of keyword? fn?))
-
-;; ---- helper ----
-
-(defn nblank-str?
-  [v]
-  (and (string? v) (not (string/blank? v))))

@@ -9,7 +9,7 @@
 ;; ---- rum element spec ----
 
 (s/def ::id
-  cu/nblank-str?)
+  ::cu/nblank-str)
 
 (s/def ::constructor
   fn?)

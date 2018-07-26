@@ -10,7 +10,7 @@
 ;; ---- websocket client params ----
 
 (s/def ::server-uri
-  cu/nblank-str?)
+  ::cu/nblank-str)
 
 (s/def ::type
   #{:auto :ws :ajax})
