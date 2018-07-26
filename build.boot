@@ -9,6 +9,8 @@
                  ;; ---- cljc ----
                  [org.clojure/core.async "0.4.474" :scope "provided"]
                  [com.stuartsierra/component "0.3.2"]
+                 [datascript "0.16.6" :scope "provided"]
+                 [datascript-schema "0.2.1" :scope "provided"]
                  [bidi "2.1.3" :scope "provided"]
                  [rum "0.11.2" :scope "provided"]
                  [cljs-ajax "0.7.4" :scope "provided"]
