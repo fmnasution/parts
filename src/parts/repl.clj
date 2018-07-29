@@ -1,6 +1,6 @@
 (ns parts.repl
   (:require
-   [boot.util :as bu]
+   [boot.util :as btu]
    [com.stuartsierra.component :as c]
    [clojure.tools.namespace.repl :refer [refresh]]
    [clojure.tools.namespace.reload :as nsreload]))
@@ -32,10 +32,10 @@
 (defn reboot!
   [tracker restart?]
   (when restart?
-    (bu/info "Shutting down system...\n")
+    (btu/info "Shutting down system...\n")
     (shutdown!))
-  (bu/info "Reloading namespaces...\n")
+  (btu/info "Reloading namespaces...\n")
   (nsreload/track-reload tracker)
   (when restart?
-    (bu/info "Starting back system...\n")
+    (btu/info "Starting back system...\n")
     (boot!)))

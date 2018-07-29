@@ -2,7 +2,7 @@
   (:require
    [clojure.pprint :refer [pprint]]
    [boot.core :as bt]
-   [boot.util :as bu]
+   [boot.util :as btu]
    [clojure.tools.namespace.dir :as nsdir]
    [clojure.tools.namespace.track :as nstrack]
    [parts.repl :as rpl]))
@@ -11,8 +11,8 @@
   [system-symbol prev-fileset next-fileset files {:keys [paths regexes]}]
   (when (some? system-symbol)
     (if (empty? files)
-      (bu/info "No `files` to be watched."
-               "Will not attempt to manage `system`'s lifecycles.")
+      (btu/info "No `files` to be watched."
+                "Will not attempt to manage `system`'s lifecycles.")
       (let [fileset-diff (bt/fileset-diff prev-fileset next-fileset)
             query-fn     (cond
                            paths
@@ -40,12 +40,12 @@
         tracker_      (atom (nsdir/scan-dirs (nstrack/tracker) dirs))
         init-system   (if (some? sys)
                         (delay
-                         (bu/info "Starting system...\n")
+                         (btu/info "Starting system...\n")
                          (rpl/setup! sys)
                          (rpl/boot!))
                         (delay
-                         (bu/info "No system is supplied."
-                                  "Will only refresh namespaces.\n")))]
+                         (btu/info "No system is supplied."
+                                   "Will only refresh namespaces.\n")))]
     (fn [next-task]
       (fn [fileset]
         (when (realized? init-system)
