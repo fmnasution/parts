@@ -19,6 +19,7 @@
                  ;; ---- cljs ----
                  [org.clojure/clojurescript "1.10.339" :scope "provided"]
                  ;; ---- dev ----
+                 [org.clojure/tools.reader "1.3.0" :scope "test"]
                  [samestep/boot-refresh "0.1.0" :scope "test"]
                  [adzerk/bootlaces "0.1.13" :scope "test"]])
 
