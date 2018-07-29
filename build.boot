@@ -46,5 +46,5 @@
   []
   (comp
    (repl :server true)
-   (watch)
+   (watch :verbose true)
    (refresh)))
