@@ -13,7 +13,8 @@
     (if (empty? files)
       (btu/info "No `files` to be watched."
                 "Will not attempt to manage `system`'s lifecycles.")
-      (let [fileset-diff (bt/fileset-diff prev-fileset next-fileset)
+      (let [input-files (bt/input-files
+                         (bt/fileset-diff prev-fileset next-fileset))
             query-fn     (cond
                            paths
                            bt/by-path
@@ -24,8 +25,7 @@
                            :else
                            bt/by-name)
             files        (if regexes (map re-pattern files) files)]
-        (->> fileset-diff
-             (bt/input-files)
+        (->> input-files
              (query-fn files)
              (seq)
              (boolean))))))
