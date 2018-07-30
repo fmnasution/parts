@@ -23,7 +23,7 @@
   [conn path]
   (when-let [norm-map (try
                         (when (some? path)
-                          (slurp path))
+                          (read-string (slurp path)))
                         (catch java.io.FileNotFoundException error
                           nil))]
     (dtmcnf/ensure-conforms conn norm-map)))
