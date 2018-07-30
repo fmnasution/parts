@@ -1,4 +1,4 @@
-(ns parts.components.datasript
+(ns parts.components.datascript
   (:require
    [com.stuartsierra.component :as c]
    [datascript.core :as dts]
