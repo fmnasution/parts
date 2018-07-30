@@ -1,5 +1,6 @@
 (set-env!
- :source-paths #{"src/"}
+ :source-paths #{"src/" "test/"}
+ :resource-paths #{"resources/"}
  :dependencies '[;; ---- clj ----
                  [org.clojure/clojure "1.10.0-alpha5"]
                  [metosin/ring-http-response "0.9.0"]
@@ -21,11 +22,13 @@
                  ;; ---- dev ----
                  [org.clojure/tools.reader "1.3.0" :scope "test"]
                  [samestep/boot-refresh "0.1.0" :scope "test"]
-                 [adzerk/bootlaces "0.1.13" :scope "test"]])
+                 [adzerk/bootlaces "0.1.13" :scope "test"]
+                 [metosin/bat-test "0.4.0"]])
 
 (require
  '[samestep.boot-refresh :refer [refresh]]
- '[adzerk.bootlaces :refer [bootlaces! build-jar push-snapshot push-release]])
+ '[adzerk.bootlaces :refer [bootlaces! build-jar push-snapshot push-release]]
+ '[metosin.bat-test :refer [bat-test]])
 
 (def +version+
   "0.1.7-SNAPSHOT")
@@ -47,5 +50,6 @@
   []
   (comp
    (repl :server true)
-   (watch :verbose true)
-   (refresh)))
+   (watch)
+   (refresh)
+   (bat-test)))
