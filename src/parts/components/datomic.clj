@@ -1,6 +1,7 @@
 (ns parts.components.datomic
   (:require
    [clojure.spec.alpha :as s]
+   [clojure.java.io :as jio]
    [com.stuartsierra.component :as c]
    [datomic.api :as dtm]
    [io.rkn.conformity :as dtmcnf]
@@ -21,11 +22,7 @@
 
 (defn- ensure-conforms!
   [conn path]
-  (when-let [norm-map (try
-                        (when (some? path)
-                          (read-string (slurp path)))
-                        (catch java.io.FileNotFoundException error
-                          nil))]
+  (when-let [norm-map (some-> path (jio/resource) (slurp) (read-string))]
     (dtmcnf/ensure-conforms conn norm-map)))
 
 (defrecord Datomic [config conn]
