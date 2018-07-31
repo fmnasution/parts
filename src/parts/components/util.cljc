@@ -18,7 +18,7 @@
                   :inner-routes  ::inner-routes)))
 
 (s/def ::routes
-  (s/tuple #(= "" %) ::inner-routes))
+  (s/tuple ::nblank-str ::inner-routes))
 
 (s/def ::resources
   (s/map-of keyword? fn?))
