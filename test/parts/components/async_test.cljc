@@ -2,21 +2,17 @@
   (:require
    [com.stuartsierra.component :as c]
    [parts.components.async :as pcasnc]
+   [parts.test-helpers :as pth]
    #?@(:clj  [[clojure.test :refer [deftest testing is]]
               [clojure.core.async :as a]]
        :cljs [[cljs.test :refer [deftest testing is]]
               [cljs.core.async :as a]])))
 
-(defn- chan?
-  [x]
-  #?(:clj  (instance? clojure.core.async.impl.channels.ManyToManyChannel x)
-     :cljs (instance?    cljs.core.async.impl.channels.ManyToManyChannel x)))
-
 (deftest item-dispatcher-component
   (testing "item dispatcher lifecycle"
     (let [started (c/start (pcasnc/make-item-dispatcher {:config {}}))
           stopped (c/stop started)]
-      (is (chan? (:item-chan started)))
+      (is (pth/chan? (:item-chan started)))
       (is (nil? (:item-chan stopped))))))
 
 (deftest channel-pipeliner-component
@@ -76,7 +72,7 @@
                       (assoc :a {:a-key (a/chan)})
                       (c/start))
           stopped (c/stop started)]
-      (is (chan? (:stop-chan started)))
+      (is (pth/chan? (:stop-chan started)))
       (is (nil? (:stop-chan stopped)))))
   (testing "listening a message"
     (let [chan    (a/chan)
