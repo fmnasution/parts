@@ -25,7 +25,10 @@
 
 (defn- request!
   [routes handler route-params request-method option]
-  (let [uri        (apply b/path-for routes handler (flatten (seq route-params)))
+  (let [uri        (apply b/path-for
+                          routes
+                          handler
+                          (flatten (seq route-params)))
         request-fn (case request-method
                      :get    jx/GET
                      :post   jx/POST
@@ -39,7 +42,7 @@
     (s/assert ::http-client-params this)
     (if (some? caller)
       this
-      (let [caller (fn [routes handler route-params request-method option]
+      (let [caller (fn [handler route-params request-method option]
                      (let [wrapper (:wrapper option-middleware identity)]
                        (request! routes
                                  handler
