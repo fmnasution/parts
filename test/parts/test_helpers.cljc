@@ -1,4 +1,7 @@
-(ns parts.test-helpers)
+(ns parts.test-helpers
+  (:require
+   #?@(:clj  [[clojure.core.async :as a]]
+       :cljs [[cljs.core.async :as a]])))
 
 (defn chan?
   [x]
